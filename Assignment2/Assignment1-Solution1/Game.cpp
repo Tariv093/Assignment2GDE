@@ -1,10 +1,16 @@
 #include "Game.hpp"
-
+#include "State.hpp"
+#include "StateIdentifiers.hpp"
+#include "GameState.hpp"
 const int gNumFrameResources = 3;
 
 Game::Game(HINSTANCE hInstance)
 	: D3DApp(hInstance)
-	, mWorld(this)
+	//, mWorld(this)
+	, mPlayer()
+	, mStateStack(State::Context(mPlayer,this))
+	
+
 {
 }
 
@@ -41,7 +47,7 @@ bool Game::Initialize()
 	BuildRenderItems();
 	BuildFrameResources();
 	BuildPSOs();
-
+	RegisterStates();
 	// Execute the initialization commands.
 	ThrowIfFailed(mCommandList->Close());
 	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
@@ -676,6 +682,15 @@ void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector
 
 		cmdList->DrawIndexedInstanced(ri->IndexCount, 1, ri->StartIndexLocation, ri->BaseVertexLocation, 0);
 	}
+}
+
+void Game::RegisterStates()
+{
+	//mStateStack.registerState<TitleState>(States::Title);
+	//mStateStack.registerState<MenuState>(States::Menu);
+	mStateStack.registerState<GameState>(States::Game);
+	//mStateStack.registerState<PauseState>(States::Pause);
+	//mStateStack.registerState<LoadingState>(States::Loading);
 }
 
 //step21

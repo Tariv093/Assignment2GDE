@@ -1,5 +1,6 @@
 #include "World.hpp"
 #include "Player.hpp"
+#include "StateStack.hpp"
 class Game : public D3DApp
 {
 public:
@@ -35,7 +36,7 @@ private:
 	void BuildMaterials();
 	void BuildRenderItems();
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems);
-
+	void RegisterStates();
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
 public:
@@ -81,7 +82,7 @@ public:
 	Camera mCamera;
 	World mWorld;
 	Player mPlayer;
-
+	StateStack mStateStack;
 public:
 	ID3D12GraphicsCommandList*  getCmdList() { return mCommandList.Get(); }
 	std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }

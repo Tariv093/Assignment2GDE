@@ -1,13 +1,9 @@
 #ifndef BOOK_GAMESTATE_HPP
 #define BOOK_GAMESTATE_HPP
 
-#include <State.hpp>
-#include <World.hpp>
-#include <Player.hpp>
-
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Text.hpp>
-
+#include "State.hpp"
+#include "World.hpp"
+#include "Player.hpp""
 
 class GameState : public State
 {
@@ -15,8 +11,8 @@ public:
 	GameState(StateStack& stack, Context context);
 
 	virtual void		draw();
-	virtual bool		update(sf::Time dt);
-	virtual bool		handleEvent(const sf::Event& event);
+	virtual bool		update(const GameTimer& dt);
+	virtual bool		handleEvent(WPARAM btnState);
 
 
 private:

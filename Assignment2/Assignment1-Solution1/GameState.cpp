@@ -1,9 +1,9 @@
-#include <GameState.hpp>
+#include "GameState.hpp"
 
 
 GameState::GameState(StateStack& stack, Context context)
 	: State(stack, context)
-	, mWorld(*context.window)
+	, mWorld(&(context.game->mWorld))
 	, mPlayer(*context.player)
 {
 }
@@ -13,7 +13,7 @@ void GameState::draw()
 	mWorld.draw();
 }
 
-bool GameState::update(sf::Time dt)
+bool GameState::update(const GameTimer& dt)
 {
 	mWorld.update(dt);
 
@@ -23,15 +23,15 @@ bool GameState::update(sf::Time dt)
 	return true;
 }
 
-bool GameState::handleEvent(const sf::Event& event)
+bool GameState::handleEvent(WPARAM btnState)
 {
 	// Game input handling
 	CommandQueue& commands = mWorld.getCommandQueue();
-	mPlayer.handleEvent(event, commands);
+	mPlayer.handleEvent(commands);
 
 	// Escape pressed, trigger the pause screen
 #pragma region step 1
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+	if (btnState == VK_ESCAPE)
 		requestStackPush(States::Pause);
 #pragma endregion
 	return true;

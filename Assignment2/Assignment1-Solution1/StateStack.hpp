@@ -59,7 +59,7 @@ private:
 	std::vector<PendingChange>							mPendingList;
 
 	State::Context										mContext;
-	std::map<States::ID, std::function<State::StatePtr()>>		mFactories;
+	std::map<States::ID, std::function<State::Ptr()>>		mFactories;
 };
 
 
