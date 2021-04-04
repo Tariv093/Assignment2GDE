@@ -1,23 +1,23 @@
 #include "GameState.hpp"
+#include "Game.hpp"
 
-
-GameState::GameState(StateStack& stack, Context context)
-	: State(stack, context)
-	, mWorld(&(context.game->mWorld))
+GameState::GameState(StateStack& stack, Context context, Game* game)
+	: State(stack, context, game)
+	, mWorld(&(mGame->mWorld))
 	, mPlayer(*context.player)
 {
 }
 
 void GameState::draw()
 {
-	mWorld.draw();
+	mWorld->draw();
 }
 
 bool GameState::update(const GameTimer& dt)
 {
-	mWorld.update(dt);
+	mWorld->update(dt);
 
-	CommandQueue& commands = mWorld.getCommandQueue();
+	CommandQueue& commands = mWorld->getCommandQueue();
 	mPlayer.handleRealtimeInput(commands);
 
 	return true;
@@ -26,7 +26,7 @@ bool GameState::update(const GameTimer& dt)
 bool GameState::handleEvent(WPARAM btnState)
 {
 	// Game input handling
-	CommandQueue& commands = mWorld.getCommandQueue();
+	CommandQueue& commands = mWorld->getCommandQueue();
 	mPlayer.handleEvent(commands);
 
 	// Escape pressed, trigger the pause screen

@@ -12,6 +12,7 @@
 
 class StateStack;
 class Player;
+class Game;
 
 class State
 {
@@ -20,21 +21,21 @@ public:
 
 	struct Context
 	{
-		Context(Player& player,Game* game);
+		Context(Player& player);
 
-		Game* game;
 		Player* player;
 	};
 
 
 public:
-	State(StateStack& stack, Context context);
+	State(StateStack& stack, Context context, Game* game);
 	virtual				~State();
 
 	virtual void		draw() = 0;
 	virtual bool		update(const GameTimer& dt) = 0;
 	virtual bool		handleEvent(WPARAM btnState) = 0;
-
+	virtual void		BuildScene() = 0;
+	Game*				mGame;
 
 protected:
 	void				requestStackPush(States::ID stateID);
@@ -43,9 +44,9 @@ protected:
 
 	Context				getContext() const;
 
+	StateStack*			mStack;
 
 private:
-	StateStack* mStack;
 	Context				mContext;
 };
 

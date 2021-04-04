@@ -2,15 +2,15 @@
 #include "StateStack.hpp"
 
 
-State::Context::Context(Player& player, Game* game)
-	: game(game)
-	, player(&player)
+State::Context::Context(Player& player)
+	:  player(&player)
 {
 }
 
-State::State(StateStack& stack, Context context)
+State::State(StateStack& stack, Context context, Game* game)
 	: mStack(&stack)
 	, mContext(context)
+	, mGame(game)
 {
 }
 

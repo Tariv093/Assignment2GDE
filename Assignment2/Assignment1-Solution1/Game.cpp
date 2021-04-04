@@ -1,14 +1,15 @@
 #include "Game.hpp"
 #include "State.hpp"
 #include "StateIdentifiers.hpp"
+#include "StateStack.hpp"
 #include "GameState.hpp"
 const int gNumFrameResources = 3;
 
 Game::Game(HINSTANCE hInstance)
 	: D3DApp(hInstance)
-	//, mWorld(this)
+	, mWorld(this)
 	, mPlayer()
-	, mStateStack(State::Context(mPlayer,this))
+	, mStateStack(State::Context(mPlayer))
 	
 
 {
