@@ -20,7 +20,6 @@ private:
 	virtual void OnMouseDown(WPARAM btnState, int x, int y)override;
 	virtual void OnMouseUp(WPARAM btnState, int x, int y)override;
 	virtual void OnMouseMove(WPARAM btnState, int x, int y)override;
-	void ProcessInput();
 	void OnKeyboardInput(const GameTimer& gt);
 	void UpdateCamera(const GameTimer& gt);
 	void AnimateMaterials(const GameTimer& gt);
@@ -34,6 +33,7 @@ private:
 	void BuildShadersAndInputLayout();
 	void BuildShapeGeometry();
 	void BuildPSOs();
+	void BuildFrameResources(int numRenderItems);
 	void BuildFrameResources();
 	void BuildMaterials();
 	void BuildRenderItems();
@@ -65,7 +65,6 @@ public:
 	ComPtr<ID3D12PipelineState> mOpaquePSO = nullptr;
 
 	// List of all the render items.
-	std::vector<std::unique_ptr<RenderItem>> mAllRitems;
 
 	// Render items divided by PSO.
 	std::vector<RenderItem*> mOpaqueRitems;

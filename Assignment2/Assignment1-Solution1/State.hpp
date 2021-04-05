@@ -37,6 +37,7 @@ public:
 	virtual void		BuildScene() = 0;
 	Game*				mGame;
 	Context*			getContext() const;
+	std::vector<std::unique_ptr<RenderItem>> mAllRitems;
 protected:
 	void				requestStackPush(States::ID stateID);
 	void				requestStackPop();

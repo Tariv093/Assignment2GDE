@@ -47,5 +47,8 @@ void GameState::BuildScene()
 {
 	//getContext()->game.BuildMaterials();
 	mWorld.buildScene();
+
+	getContext()->game.ClearFrameResources();
+	getContext()->game.BuildFrameResources(mAllRitems.size());
 	
 }

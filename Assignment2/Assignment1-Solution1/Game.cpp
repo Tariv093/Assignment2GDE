@@ -70,7 +70,7 @@ void Game::OnResize()
 
 void Game::Update(const GameTimer& gt)
 {
-	ProcessInput();
+	//ProcessInput();
 	//mWorld.update(gt);
 	UpdateCamera(gt);
 
@@ -606,7 +606,7 @@ void Game::BuildPSOs()
 	ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mOpaquePSO)));
 }
 
-void Game::BuildFrameResources()
+void Game::BuildFrameResources(int numRenderItems)
 {
 	for (int i = 0; i < gNumFrameResources; ++i)
 	{
