@@ -2,9 +2,7 @@
 #define BOOK_STATE_HPP
 
 #include "StateIdentifiers.hpp"
-#include "../../Common/d3dApp.h"
-#include "SceneNode.hpp"
-#include "FrameResource.h"
+#include "../../Common/d3dApp.h" 
 
 
 #include <memory>
@@ -21,14 +19,16 @@ public:
 
 	struct Context
 	{
-		Context(Player& player);
+		Context(Player* player, Game* game);
 
 		Player* player;
+		Game* game;
+
 	};
 
 
 public:
-	State(StateStack& stack, Context context, Game* game);
+	State(StateStack* stack, Context* context);
 	virtual				~State();
 
 	virtual void		draw() = 0;
@@ -36,18 +36,18 @@ public:
 	virtual bool		handleEvent(WPARAM btnState) = 0;
 	virtual void		BuildScene() = 0;
 	Game*				mGame;
-
+	Context*			getContext() const;
 protected:
 	void				requestStackPush(States::ID stateID);
 	void				requestStackPop();
 	void				requestStateClear();
 
-	Context				getContext() const;
+	
 
 	StateStack*			mStack;
 
 private:
-	Context				mContext;
+	Context*			mContext;
 };
 
 #endif // BOOK_STATE_HPP

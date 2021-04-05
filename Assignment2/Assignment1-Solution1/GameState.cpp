@@ -1,24 +1,26 @@
 #include "GameState.hpp"
 #include "Game.hpp"
 
-GameState::GameState(StateStack& stack, Context context, Game* game)
-	: State(stack, context, game)
-	, mWorld(&(mGame->mWorld))
-	, mPlayer(*context.player)
+GameState::GameState(StateStack* stack, Context* context)
+	: State(stack, context)
+	, mWorld(this)
+	, mPauseBackground(nullptr)
+	, mPauseText(nullptr)
+	, mPauseInstructionText(nullptr)
+	, mPauseSceneGraph(new SceneNode(this))
 {
+	BuildScene();
 }
 
 void GameState::draw()
 {
-	mWorld->draw();
+	mWorld.draw();
 }
 
 bool GameState::update(const GameTimer& dt)
 {
-	mWorld->update(dt);
-
-	CommandQueue& commands = mWorld->getCommandQueue();
-	mPlayer.handleRealtimeInput(commands);
+	ProcessInput();
+	mWorld.update(dt);
 
 	return true;
 }
@@ -26,8 +28,6 @@ bool GameState::update(const GameTimer& dt)
 bool GameState::handleEvent(WPARAM btnState)
 {
 	// Game input handling
-	CommandQueue& commands = mWorld->getCommandQueue();
-	mPlayer.handleEvent(commands);
 
 	// Escape pressed, trigger the pause screen
 #pragma region step 1
@@ -35,4 +35,17 @@ bool GameState::handleEvent(WPARAM btnState)
 		requestStackPush(States::Pause);
 #pragma endregion
 	return true;
+}
+
+void GameState::ProcessInput()
+{
+	CommandQueue& commands = mWorld.getCommandQueue();
+	getContext()->player->handleRealtimeInput(commands);
+	getContext()->player->handleRealtimeInput(commands);
+}
+void GameState::BuildScene()
+{
+	//getContext()->game.BuildMaterials();
+	mWorld.buildScene();
+	
 }

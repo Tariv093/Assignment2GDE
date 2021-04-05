@@ -49,7 +49,7 @@ struct RenderItem
 	int BaseVertexLocation = 0;
 };
 
-class Game;
+class State;
 
 class SceneNode
 {
@@ -58,7 +58,7 @@ public:
 
 
 public:
-	SceneNode(Game* game);
+	SceneNode(State* state);
 
 	void					attachChild(Ptr child);
 	Ptr						detachChild(const SceneNode& node);
@@ -90,7 +90,7 @@ private:
 	virtual unsigned int	getCategory() const;
 	
 protected:
-	Game*					game;
+	State*					state;
 	RenderItem*				renderer;
 private:
 	XMFLOAT3				mWorldPosition;

@@ -15,7 +15,7 @@ public:
 
 
 public:
-	Aircraft(Type type, Game* game);
+	Aircraft(Type type, State* state);
 
 
 private:
@@ -26,5 +26,5 @@ private:
 private:
 	Type				mType;
 	std::string			mSprite;
-	RenderItem* mAircraftRitem;
+	//RenderItem* mAircraftRitem;
 };

@@ -2,10 +2,10 @@
 #include "Game.hpp"
 
 
-SceneNode::SceneNode(Game* game)
+SceneNode::SceneNode(State* state)
 	: mChildren()
 	, mParent(nullptr)
-	, game(game)
+	, state(state)
 {
 	mWorldPosition = XMFLOAT3(0, 0, 0);
 	mWorldScaling = XMFLOAT3(1, 1, 1);

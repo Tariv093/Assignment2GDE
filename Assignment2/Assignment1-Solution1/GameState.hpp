@@ -9,16 +9,16 @@
 class GameState : public State
 {
 public:
-	GameState(StateStack& stack, Context context, Game* game);
+	GameState(StateStack* stack, Context* context);
 
 	virtual void		draw();
 	virtual bool		update(const GameTimer& dt);
 	virtual bool		handleEvent(WPARAM btnState);
 
-
+	void ProcessInput();
 private:
-	World*				mWorld;
-	Player&				mPlayer;
+	World				mWorld;
+	//Player&				mPlayer;
 
 public:
 	SceneNode* mPauseSceneGraph;

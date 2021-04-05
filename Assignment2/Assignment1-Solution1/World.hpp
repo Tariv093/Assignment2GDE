@@ -3,10 +3,11 @@
 #include "Aircraft.hpp"
 #include "SpriteNode.h"
 #include "CommandQueue.hpp"
+class State;
 class World
 {
 public:
-	explicit							World(Game* game);
+	explicit							World(State* state);
 	void								update(const GameTimer& gt);
 	void								draw();
 	void								adjustPlayerVelo();
@@ -24,7 +25,7 @@ private:
 
 
 private:
-	Game* mGame;
+	State* mState;
 
 	SceneNode* mSceneGraph;
 	std::array<SceneNode*, 2>	mSceneLayers;

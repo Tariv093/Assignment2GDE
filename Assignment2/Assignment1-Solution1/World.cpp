@@ -1,9 +1,9 @@
 #define NOMINMAX
 #include "World.hpp"
 
-World::World(Game* game)
-	: mSceneGraph(new SceneNode(game))
-	, mGame(game)
+World::World(State* state)
+	: mSceneGraph(new SceneNode(state))
+	, mState(state)
 	, mPlayerAircraft(nullptr)
 	, mBackground(nullptr)
 	, mWorldBounds(-5.f, 5.f, -2.f, 2.0f) //Left, Right, Down, Up
@@ -68,28 +68,28 @@ void World::adaptPlayerPosition()
 
 void World::buildScene()
 {
-	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Type::Eagle, mGame));
+	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Type::Eagle, mState));
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(0.0f, 0.1f, 0.0f);
 	mPlayerAircraft->setScale(0.5f, 0.5f, 0.5f);
 	mPlayerAircraft->setVelocity(mScrollSpeed, 0.0f, 0.0f);
 	mSceneGraph->attachChild(std::move(player));
 
-	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Type::Raptor, mGame));
+	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Type::Raptor, mState));
 	auto raptor = enemy1.get();
 	raptor->setPosition(0.5f, 0.0f, 1.0f);
 	raptor->setScale(1.0f, 1.0f, 1.0f);
 	raptor->setWorldRotation(0.0f,  XM_PI, 0.0f);
 	mPlayerAircraft->attachChild(std::move(enemy1));
 
-	std::unique_ptr<Aircraft> enemy2(new Aircraft(Aircraft::Type::Raptor, mGame));
+	std::unique_ptr<Aircraft> enemy2(new Aircraft(Aircraft::Type::Raptor, mState));
 	auto raptor2 = enemy2.get();
 	raptor2->setPosition(-0.5, 0, 1);
 	raptor2->setScale(1.0, 1.0, 1.0);
 	raptor2->setWorldRotation(0, XM_PI, 0);
 	mPlayerAircraft->attachChild(std::move(enemy2));
 
-	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mGame));
+	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mState));
 	mBackground = backgroundSprite.get();
 	//mBackground->setPosition(mWorldBounds.left, mWorldBounds.top);
 	mBackground->setPosition(0, 0, 0.0);

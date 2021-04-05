@@ -1,6 +1,8 @@
 #include "World.hpp"
 #include "Player.hpp"
 #include "StateStack.hpp"
+#include "GameState.hpp"
+class StateStack;
 class Game : public D3DApp
 {
 public:
@@ -80,7 +82,7 @@ public:
 
 	POINT mLastMousePos;
 	Camera mCamera;
-	World mWorld;
+	//World mWorld;
 	Player mPlayer;
 	StateStack mStateStack;
 public:

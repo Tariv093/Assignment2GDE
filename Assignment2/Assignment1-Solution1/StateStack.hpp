@@ -10,7 +10,11 @@
 #include <functional>
 #include <map>
 
+using Microsoft::WRL::ComPtr;
+using namespace DirectX;
+using namespace DirectX::PackedVector;
 
+class Game;
 class StateStack 
 {
 public:
@@ -37,8 +41,12 @@ public:
 	void				clearStates();
 
 	bool				isEmpty() const;
+	
+	std::vector<State::Ptr>* GetStateStack();
 
-
+	int					GetStackSize() { return mStack.size(); }
+	State* GetCurrentState() { return mStack.back().get(); }
+	State* GetPreviousState();
 private:
 	State::Ptr			createState(States::ID stateID);
 	void				applyPendingChanges();
@@ -68,7 +76,7 @@ void StateStack::registerState(States::ID stateID)
 {
 	mFactories[stateID] = [this]()
 	{
-		return State::Ptr(new T(*this, mContext));
+		return State::Ptr(new T(this, &mContext));
 	};
 }
 

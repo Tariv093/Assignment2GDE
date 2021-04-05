@@ -62,6 +62,11 @@ bool StateStack::isEmpty() const
 	return mStack.empty();
 }
 
+std::vector<State::Ptr>* StateStack::GetStateStack()
+{
+	return &mStack;
+}
+
 State::Ptr StateStack::createState(States::ID stateID)
 {
 	auto found = mFactories.find(stateID);
@@ -98,3 +103,14 @@ StateStack::PendingChange::PendingChange(Action action, States::ID stateID)
 	, stateID(stateID)
 {
 }
+
+
+
+State* StateStack::GetPreviousState()
+{
+	if (mStack.size() >= 2)
+	{
+		return mStack[mStack.size() - 2].get();
+	}
+}
+

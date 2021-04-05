@@ -2,15 +2,15 @@
 #include "StateStack.hpp"
 
 
-State::Context::Context(Player& player)
-	:  player(&player)
+State::Context::Context(Player* player, Game* game)
+	:  player(player)
+	,  game(game)
 {
 }
 
-State::State(StateStack& stack, Context context, Game* game)
-	: mStack(&stack)
+State::State(StateStack* stack, Context* context)
+	: mStack(stack)
 	, mContext(context)
-	, mGame(game)
 {
 }
 
@@ -33,7 +33,7 @@ void State::requestStateClear()
 	mStack->clearStates();
 }
 
-State::Context State::getContext() const
+State::Context* State::getContext() const
 {
 	return mContext;
 }

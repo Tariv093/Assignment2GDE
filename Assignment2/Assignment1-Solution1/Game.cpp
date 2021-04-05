@@ -1,16 +1,11 @@
 #include "Game.hpp"
-#include "State.hpp"
-#include "StateIdentifiers.hpp"
 #include "StateStack.hpp"
-#include "GameState.hpp"
 const int gNumFrameResources = 3;
 
 Game::Game(HINSTANCE hInstance)
 	: D3DApp(hInstance)
-	, mWorld(this)
-	, mPlayer()
-	, mStateStack(State::Context(mPlayer))
-	
+	, mStateStack(State::Context(&mPlayer, this))
+	//, mWorld(this) // temp
 
 {
 }
@@ -45,17 +40,19 @@ bool Game::Initialize()
 	BuildShadersAndInputLayout();
 	BuildShapeGeometry();
 	BuildMaterials();
-	BuildRenderItems();
-	BuildFrameResources();
-	BuildPSOs();
+	//BuildRenderItems();
+	//BuildFrameResources();
 	RegisterStates();
+	BuildPSOs();
 	// Execute the initialization commands.
+	mPlayer = Player();
 	ThrowIfFailed(mCommandList->Close());
 	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
 	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
 
 	// Wait until initialization is complete.
 	FlushCommandQueue();
+	mStateStack.pushState(States::Game);
 
 	return true;
 }
@@ -74,8 +71,16 @@ void Game::OnResize()
 void Game::Update(const GameTimer& gt)
 {
 	ProcessInput();
-	mWorld.update(gt);
+	//mWorld.update(gt);
 	UpdateCamera(gt);
+
+
+	mStateStack.update(gt);
+
+	if (mStateStack.isEmpty())
+	{
+		exit(0);
+	}
 
 	// Cycle through the circular frame resource array.
 	mCurrFrameResourceIndex = (mCurrFrameResourceIndex + 1) % gNumFrameResources;
@@ -131,7 +136,8 @@ void Game::Draw(const GameTimer& gt)
 	auto passCB = mCurrFrameResource->PassCB->Resource();
 	mCommandList->SetGraphicsRootConstantBufferView(2, passCB->GetGPUVirtualAddress());
 
-	mWorld.draw();
+	//mWorld.draw();
+	mStateStack.draw();
 	//DrawRenderItems(mCommandList.Get(), mOpaqueRitems);
 
 	// Indicate a state transition on the resource usage.
@@ -200,12 +206,12 @@ void Game::OnMouseMove(WPARAM btnState, int x, int y)
 	mLastMousePos.y = y;
 }
 
-void Game::ProcessInput()
-{
-	CommandQueue& command = mWorld.getCommandQueue();
-	mPlayer.handleEvent(command);
-	mPlayer.handleRealtimeInput(command);
-}
+//void Game::ProcessInput()
+//{
+//	CommandQueue& command = getContext()->getCommandQueue();
+//	mPlayer.handleEvent(command);
+//	mPlayer.handleRealtimeInput(command);
+//}
 
 void Game::OnKeyboardInput(const GameTimer& gt)
 {
@@ -643,14 +649,14 @@ void Game::BuildMaterials()
 
 }
 
-void Game::BuildRenderItems()
-{
-	mWorld.buildScene();
-
-	// All the render items are opaque.
-	for (auto& e : mAllRitems)
-		mOpaqueRitems.push_back(e.get());
-}
+//void Game::BuildRenderItems()
+//{
+//	mWorld.buildScene();
+//
+//	// All the render items are opaque.
+//	for (auto& e : mAllRitems)
+//		mOpaqueRitems.push_back(e.get());
+//}
 
 void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems)
 {
